@@ -9,7 +9,7 @@ import {
   FlatList,
   Image,
   Alert,
-  ScrollView
+  ScrollView,
 } from 'react-native';
 import TouchableScale from '../components/TouchableScale';
 
@@ -36,9 +36,8 @@ export default function HomeScreen({ navigation }) {
     const q = query.trim().toLowerCase();
     if (!q) return movies;
     return movies.filter(
-      (m) =>
-        (m.title || '').toLowerCase().includes(q) 
-        // || (m.plot || '').toLowerCase().includes(q)
+      (m) => (m.title || '').toLowerCase().includes(q)
+      // || (m.plot || '').toLowerCase().includes(q)
     );
   }, [movies, query]);
 
@@ -57,15 +56,23 @@ export default function HomeScreen({ navigation }) {
       startProgress();
       const res = await fetch(buildUrl(genre));
       const data = await res.json();
+      // const normalized = (Array.isArray(data) ? data : []).map((item, idx) => ({
+      //   id: item.id ?? `${genre}-${idx}`,
+      //   title: item.title ?? 'Untitled',
+      //   // plot: item.plot ?? '',
+      //   posterURL:
+      //     item.posterURL ||
+      //     item.poster ||
+      //     item.imageURL ||
+      //     'https://via.placeholder.com/300x450.png?text=No+Poster',
+      // }));
       const normalized = (Array.isArray(data) ? data : []).map((item, idx) => ({
         id: item.id ?? `${genre}-${idx}`,
         title: item.title ?? 'Untitled',
-        // plot: item.plot ?? '',
         posterURL:
           item.posterURL ||
-          item.poster ||
-          item.imageURL ||
           'https://via.placeholder.com/300x450.png?text=No+Poster',
+        imdbId: item.imdbId ?? null, // for linking to imdb page
       }));
       setMovies(normalized);
     } catch (e) {
@@ -94,15 +101,15 @@ export default function HomeScreen({ navigation }) {
         <View style={{ flex: 1, marginLeft: 12 }}>
           <Text style={styles.title}>{item.title}</Text>
           // <Text style={styles.sub}>{item.year}</Text>
-          // <Text numberOfLines={2} style={styles.plot}>
-          //   {item.plot}
-          // </Text>
+          //{' '}
+          <Text numberOfLines={2} style={styles.plot}>
+            // {item.plot}
+            //{' '}
+          </Text>
         </View>
       </View>
     </TouchableScale>
   );
-
-
 
   return (
     <View style={styles.container}>
@@ -207,7 +214,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   genreBtnActive: { backgroundColor: '#2563eb' },
-  searchRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginBottom: 12 },
+  searchRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 12,
+  },
   input: {
     flex: 1,
     backgroundColor: '#111827',
