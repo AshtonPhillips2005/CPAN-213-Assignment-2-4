@@ -20,7 +20,7 @@ export const FavouritesContext = createContext({
   removeFavourite: () => {},
 });
 
-const Stack = createStackNavigator();
+const Stack = createStackNavigator(); //manage screens
 
 export default function App() {
   const [favourites, setFavourites] = useState([]);
@@ -37,13 +37,16 @@ export default function App() {
 
   const addFavourite = (item) => {
     setFavourites((prev) => {
+      // check if item in favs already
       if (prev.find((f) => f.id === item.id)) return prev;
+      
+      //if not, return new arr with added item
       return [...prev, item];
     });
   };
 
   const removeFavourite = (id) => {
-    setFavourites((prev) => prev.filter((f) => f.id !== id));
+    setFavourites((prev) => prev.filter((f) => f.id !== id));   //if current f.id (fav id) matches, remove item, if no match: item stays 
   };
 
   return (
