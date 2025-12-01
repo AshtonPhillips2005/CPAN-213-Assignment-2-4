@@ -29,11 +29,14 @@ export default function DetailsScreen({ route, navigation }) {
   }, []);
 
   const responder = PanResponder.create({
+    //listen for gestures (kinda like event listeners)
     onStartShouldSetPanResponder: () => true,
     onPanResponderMove: Animated.event([null, { dx: drag.x, dy: drag.y }], {
+      //view follows finger
       useNativeDriver: false,
     }),
     onPanResponderRelease: (_, gesture) => {
+      //if dragged right, go to prev screen
       if (gesture.dx > 120 && Math.abs(gesture.dy) < 60) {
         navigation.goBack();
       } else {
@@ -69,7 +72,6 @@ export default function DetailsScreen({ route, navigation }) {
       <Animated.Text style={[styles.header, { opacity: headerOpacity }]}>
         {movie.title}
       </Animated.Text>
-
       <Animated.View
         style={[
           styles.posterWrap,
@@ -79,9 +81,6 @@ export default function DetailsScreen({ route, navigation }) {
         <Image source={{ uri: movie.posterURL }} style={styles.poster} />
         <Text style={styles.dragHint}>Drag me →right→ to go back</Text>
       </Animated.View>
-
-      // <Text style={styles.plot}>{movie.plot || 'No plot provided.'}</Text>
-
       <View style={styles.actions}>
         <TouchableScale
           onPress={toggleFavourite}
@@ -91,19 +90,17 @@ export default function DetailsScreen({ route, navigation }) {
           ]}>
           {isFavourite ? 'Remove from Favourites' : 'Add to Favourites'}
         </TouchableScale>
-
         <TouchableScale
           onPress={() => navigation.navigate('Favourites')}
           style={[styles.actionBtn, { backgroundColor: '#64748b' }]}>
           View Favourites
         </TouchableScale>
       </View>
-
       {movie.imdbId && (
         <TouchableScale
           onPress={openImdb}
           style={[
-            styles.actionBtn,
+            styles.singleBtn,
             { backgroundColor: '#facc15', marginTop: 12 },
           ]}>
           View on IMDb
@@ -124,13 +121,16 @@ const styles = StyleSheet.create({
     backgroundColor: '#121a2a',
   },
   dragHint: { color: '#93c5fd', marginTop: 8 },
-  // plot: { color: '#cbd5e1', marginTop: 14, lineHeight: 20 },
   actionBtn: {
     flex: 1,
     paddingVertical: 12,
     borderRadius: 12,
     alignItems: 'center',
-    marginRight: 12
+  },
+  singleBtn: {
+    paddingVertical: 12,
+    borderRadius: 12,
+    alignItems: 'center',
   },
   actions: { flexDirection: 'row', marginTop: 20 },
 });
