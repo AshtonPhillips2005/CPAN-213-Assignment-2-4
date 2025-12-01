@@ -102,10 +102,10 @@ export default function HomeScreen({ navigation }) {
           <Text style={styles.title}>{item.title}</Text>
           // <Text style={styles.sub}>{item.year}</Text>
           //{' '}
-          <Text numberOfLines={2} style={styles.plot}>
-            // {item.plot}
-            //{' '}
-          </Text>
+          // <Text numberOfLines={2} style={styles.plot}>
+          //   // {item.plot}
+          //   //{' '}
+          // </Text>
         </View>
       </View>
     </TouchableScale>
