@@ -61,9 +61,10 @@ export default function DetailsScreen({ route, navigation }) {
     }
   };
 
+  // open IMDb movie page link in browser
   const openImdb = () => {
     if (movie.imdbId) {
-      Linking.openURL(`https://www.imdb.com/title/${movie.imdbId}`);
+      Linking.openURL(`https://www.imdb.com/title/${movie.imdbId}`);  //api includes imdbId
     }
   };
 
