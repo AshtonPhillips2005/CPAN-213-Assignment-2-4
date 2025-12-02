@@ -1,6 +1,14 @@
 // screens/FavouritesScreen.js
 import React, { useContext, useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, FlatList, Image, Animated, Alert } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  Image,
+  Animated,
+  Alert,
+} from 'react-native';
 import { FavouritesContext } from '../App';
 import TouchableScale from '../components/TouchableScale';
 
@@ -10,10 +18,19 @@ export default function FavouritesScreen() {
   // Simple list enter animation (third animated value)
   const listOpacity = useRef(new Animated.Value(0)).current;
 
+  // Same animation as above ^^^ for Header
+  const headerOpacity = useRef(new Animated.Value(0)).current;
+
   useEffect(() => {
     Animated.timing(listOpacity, {
       toValue: 1,
       duration: 400,
+      useNativeDriver: true,
+    }).start();
+
+    Animated.timing(headerOpacity, {
+      toValue: 1,
+      duration: 600,
       useNativeDriver: true,
     }).start();
   }, []);
@@ -24,7 +41,11 @@ export default function FavouritesScreen() {
       `Do you want to remove "${title}" from your Favourites?`,
       [
         { text: 'Cancel', style: 'cancel' },
-        { text: 'Remove', style: 'destructive', onPress: () => removeFavourite(id) },
+        {
+          text: 'Remove',
+          style: 'destructive',
+          onPress: () => removeFavourite(id),
+        },
       ]
     );
   };
@@ -39,8 +60,7 @@ export default function FavouritesScreen() {
           <View style={{ flexDirection: 'row', gap: 8, marginTop: 8 }}>
             <TouchableScale
               onPress={() => confirmRemove(item.id, item.title)}
-              style={[styles.btn, { backgroundColor: '#ef4444' }]}
-            >
+              style={[styles.btn, { backgroundColor: '#ef4444' }]}>
               Remove
             </TouchableScale>
           </View>
@@ -51,12 +71,16 @@ export default function FavouritesScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.heading}>Your favourites</Text>
+      <Animated.Text style={[styles.heading, { opacity: headerOpacity }]}>
+        Your favourites
+      </Animated.Text>
       <FlatList
         data={favourites}
         keyExtractor={(item) => String(item.id)}
         renderItem={renderItem}
-        ListEmptyComponent={<Text style={styles.empty}>No favourites yet.</Text>}
+        ListEmptyComponent={
+          <Text style={styles.empty}>No favourites yet.</Text>
+        }
         contentContainerStyle={{ paddingBottom: 20 }}
       />
     </View>
@@ -76,7 +100,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  poster: { width: 64, height: 96, borderRadius: 8, backgroundColor: '#0b1220' },
+  poster: {
+    width: 64,
+    height: 96,
+    borderRadius: 8,
+    backgroundColor: '#0b1220',
+  },
   title: { color: '#fff', fontSize: 16, fontWeight: '700' },
   sub: { color: '#cbd5e1', marginTop: 2 },
   btn: { paddingHorizontal: 12, paddingVertical: 8, borderRadius: 12 },
